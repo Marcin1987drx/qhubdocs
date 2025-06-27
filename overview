@@ -1,0 +1,90 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QualityHub Summary PDF</title>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Open Sans', sans-serif;
+      padding: 40px;
+      background: #f7f9fc;
+      color: #333;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid #0078d4;
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+    }
+    .logo {
+      height: 40px;
+    }
+    h1 {
+      font-size: 24px;
+      color: #0078d4;
+    }
+    section {
+      margin-bottom: 30px;
+    }
+    .section-title {
+      font-weight: 700;
+      color: #0078d4;
+      margin-bottom: 10px;
+    }
+    .row {
+      display: flex;
+      gap: 50px;
+    }
+    .column {
+      flex: 1;
+    }
+    label {
+      font-weight: bold;
+    }
+    .value {
+      margin-bottom: 8px;
+    }
+    #qrcode {
+      margin-top: 20px;
+    }
+    .verschrott-label {
+      border: 2px dashed #c00;
+      padding: 20px;
+      margin-top: 40px;
+      background: #fff0f0;
+      text-align: center;
+    }
+    .verschrott-label h2 {
+      margin: 0;
+      color: #c00;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="https://yourdomain.com/assets/qhub_logo.png" alt="QHub Logo" class="logo" />
+    <img src="https://yourdomain.com/assets/draexlmaier_logo.png" alt="Draexlmaier Logo" class="logo" />
+  </header> <h1>Inspection Summary</h1> <section>
+    <div class="section-title">General Info</div>
+    <div class="row">
+      <div class="column">
+        <div class="value"><label>SAP Number:</label> <span id="sapNumber"></span></div>
+        <div class="value"><label>Revision:</label> <span id="revision"></span></div>
+        <div class="value"><label>Part Number:</label> <span id="partNumber"></span></div>
+        <div class="value"><label>Supplier:</label> <span id="supplier"></span></div>
+      </div>
+      <div class="column">
+        <div class="value"><label>Order Number:</label> <span id="orderNumber"></span></div>
+        <div class="value"><label>Delivery Date:</label> <span id="deliveryDate"></span></div>
+        <div class="value"><label>Total Qty:</label> <span id="totalQty"></span></div>
+      </div>
+    </div>
+  </section> <section>
+    <div class="section-title">QR Code</div>
+    <div id="qrcode"></div>
+  </section> <section class="verschrott-label">
+    <h2>VERSCHROTTEN</h2>
+    <p>Label for parts to be
