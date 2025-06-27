@@ -87,4 +87,23 @@
     <div id="qrcode"></div>
   </section> <section class="verschrott-label">
     <h2>VERSCHROTTEN</h2>
-    <p>Label for parts to be
+    <p>Label for parts to be scrapped</p>
+  </section> <script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script> <script>
+    const params = new URLSearchParams(window.location.search);
+    const data = JSON.parse(decodeURIComponent(params.get("data")));
+
+    document.getElementById("sapNumber").textContent = data.sapNumber;
+    document.getElementById("revision").textContent = data.revision;
+    document.getElementById("partNumber").textContent = data.partNumber;
+    document.getElementById("supplier").textContent = data.supplier;
+    document.getElementById("orderNumber").textContent = data.orderNumber;
+    document.getElementById("deliveryDate").textContent = data.deliveryDate;
+    document.getElementById("totalQty").textContent = data.totalQty;
+
+    new QRCode(document.getElementById("qrcode"), {
+      text: data.sapNumber + "-" + data.partNumber,
+      width: 128,
+      height: 128,
+    });
+  </script></body>
+</html>
