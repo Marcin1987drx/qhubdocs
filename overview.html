@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Inspection Summary</title>
@@ -7,43 +8,78 @@
       font-family: Arial, sans-serif;
       margin: 40px;
       color: #333;
-    }h1, h2, h3 {
-  margin-top: 0;
-}
+      background-color: #fff;
+    }
 
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 2px solid #ccc;
-  padding-bottom: 10px;
-}
+    h1 {
+      margin-top: 0;
+      font-size: 28px;
+    }
 
-.logo {
-  height: 80px;
-  object-fit: contain;
-}
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid #ccc;
+      padding-bottom: 10px;
+    }
 
+    .logo {
+      height: 80px;
+      object-fit: contain;
+    }
+
+    #printSummary {
+      margin-top: 30px;
+      font-size: 14px;
+      color: #222;
+    }
+
+    .footer {
+      margin-top: 40px;
+      font-size: 12px;
+      color: #aaa;
+      text-align: center;
+    }
   </style>
-  <script>
-    function getParam(name) {
-      const urlParams = new URLSearchParams(window.location.search);
-      return urlParams.get(name) || '';
-    }window.onload = function () {
-  const summary = decodeURIComponent(getParam('summary'));
-  if (summary) {
-    document.getElementById("printSummary").innerHTML = summary;
-  } else {
-    document.getElementById("printSummary").innerHTML = "<p style='color:red;'>Brak danych do wyświetlenia. Upewnij się, że formularz został poprawnie wysłany.</p>";
-  }
-}
-
-  </script>
 </head>
 <body>
   <div class="header">
     <img src="https://raw.githubusercontent.com/marcin1987drx/qhubdocs/main/qualityhub.png" alt="QHub Logo" class="logo">
     <img src="https://raw.githubusercontent.com/marcin1987drx/qhubdocs/main/draexlmaier.png" alt="Draexlmaier Logo" class="logo">
-  </div> <h1>Inspection Summary</h1> <div id="printSummary" style="margin-top: 30px;"></div>
+  </div>
+
+  <h1>Inspection Summary</h1>
+
+  <div id="printSummary">
+    <p style="color:gray;">Czekam na dane z formularza Power Apps...</p>
+  </div>
+
+  <div class="footer">
+    Powered by QualityHub • Printed: <span id="printDate"></span>
+  </div>
+
+  <script>
+    function getParam(name) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(name) || '';
+    }
+
+    window.addEventListener("load", function () {
+      const summary = getParam("summary");
+      const decoded = decodeURIComponent(summary);
+      const target = document.getElementById("printSummary");
+
+      if (decoded && target) {
+        target.innerHTML = decoded;
+      } else {
+        target.innerHTML = "<p style='color:red;'>Brak danych do wyświetlenia. Upewnij się, że formularz został przesłany.</p>";
+      }
+
+      // Set print date
+      const now = new Date();
+      document.getElementById("printDate").innerText = now.toLocaleString();
+    });
+  </script>
 </body>
 </html>
