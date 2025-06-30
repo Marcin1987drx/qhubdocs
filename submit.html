@@ -1,90 +1,138 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Inspection Summary</title>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
-      padding: 32px;
+      padding: 40px;
+      background: #f5f7fa;
       color: #333;
-      background-color: #f4f4f4;
+    }
+    h1 {
+      color: #0078d4;
+      text-align: center;
     }
     .container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      margin-top: 30px;
+    }
+    .section {
       background: white;
-      padding: 24px;
-      border-radius: 10px;
-      box-shadow: 0 0 12px rgba(0,0,0,0.05);
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
-    .alert-ok {
+    .section h2 {
+      color: #0078d4;
+      margin-bottom: 10px;
+    }
+    .status {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 18px;
+    }
+    .ok {
       color: green;
-      font-weight: bold;
-      font-size: 18px;
-      margin-top: 24px;
     }
-    .alert-nok {
+    .nok {
       color: red;
-      font-weight: bold;
-      font-size: 18px;
-      margin-top: 24px;
     }
-    iframe {
-      display: block;
-      margin-top: 24px;
-      border: none;
-      width: 160px;
-      height: 160px;
-    }
-    .footer {
+    .qr {
+      text-align: center;
       margin-top: 40px;
-      font-size: 12px;
-      color: #aaa;
+    }
+    .print {
+      text-align: center;
+      margin-top: 20px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 4px;
+      background-color: #0078d4;
+      color: white;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
+  <h1>Inspection Summary</h1>
+  <div class="status" id="status"></div>
   <div class="container">
-    <h2>Inspection Summary</h2>
-    <div id="summary">Loading summary...</div>
-    <div id="status"></div>
-    <iframe id="qrcode"></iframe>
+    <div class="section">
+      <h2>📦 General Info</h2>
+      <p><b>SAP Number:</b> <span id="sapnumber"></span></p>
+      <p><b>Revision:</b> <span id="revision"></span></p>
+      <p><b>Part Number:</b> <span id="partnumber"></span></p>
+      <p><b>Supplier:</b> <span id="supplier"></span></p>
+      <p><b>Delivery Note:</b> <span id="deliverynote"></span></p>
+      <p><b>Order Number:</b> <span id="ordernumber"></span></p>
+      <p><b>Delivery Date:</b> <span id="deliverydate"></span></p>
+      <p><b>Inspection Date:</b> <span id="inspectiondate"></span></p>
+      <p><b>Total Qty:</b> <span id="totalqty"></span></p>
+      <p><b>i.O.:</b> <span id="io"></span></p>
+      <p><b>n.i.O.:</b> <span id="nio"></span></p>
+      <p><b>Reworked:</b> <span id="reworked"></span></p>
+    </div>
+    <div class="section">
+      <h2>🚫 Defects</h2>
+      <p><b>Defect 1:</b> <span id="defect1"></span></p>
+      <p><b>Raster 1:</b> <span id="raster1"></span></p>
+      <p><b>NOK 1:</b> <span id="nok1"></span></p>
+      <p><b>Reworked 1:</b> <span id="reworked1"></span></p>
+      <p><b>Defect 2:</b> <span id="defect2"></span></p>
+      <p><b>Raster 2:</b> <span id="raster2"></span></p>
+      <p><b>NOK 2:</b> <span id="nok2"></span></p>
+      <p><b>Reworked 2:</b> <span id="reworked2"></span></p>
+      <p><b>Defect 3:</b> <span id="defect3"></span></p>
+      <p><b>Raster 3:</b> <span id="raster3"></span></p>
+      <p><b>NOK 3:</b> <span id="nok3"></span></p>
+      <p><b>Reworked 3:</b> <span id="reworked3"></span></p>
+      <h3>📝 Comment:</h3>
+      <p><span id="qscomment"></span></p>
+    </div>
   </div>
-
-  <div class="footer">
-    QualityHub • Generated <span id="timestamp"></span>
+  <div class="qr">
+    <canvas id="qrcode"></canvas>
   </div>
-
+  <div class="print">
+    <button onclick="window.print()">🖨️ Print Summary</button>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/qrious"></script>
   <script>
-    const urlParams = new URLSearchParams(window.location.search);
-    const summaryRaw = urlParams.get("summary");
-    const summaryDiv = document.getElementById("summary");
-    const statusDiv = document.getElementById("status");
+    const params = new URLSearchParams(window.location.search);
+    const fields = [
+      'sapnumber','revision','partnumber','supplier','deliverynote','ordernumber','deliverydate','inspectiondate','totalqty','io','nio','reworked',
+      'defect1','raster1','nok1','reworked1','defect2','raster2','nok2','reworked2','defect3','raster3','nok3','reworked3','qscomment'
+    ];fields.forEach(id => {
+  const el = document.getElementById(id);
+  if (el) el.innerText = decodeURIComponent(params.get(id) || "");
+});
 
-    const timestamp = new Date().toLocaleString();
-    document.getElementById("timestamp").textContent = timestamp;
+const totalNok = [1, 2, 3].reduce((sum, i) => {
+  const val = parseInt(params.get('nok' + i) || '0');
+  return sum + (isNaN(val) ? 0 : val);
+}, 0);
 
-    if (!summaryRaw) {
-      summaryDiv.innerHTML = '<p style="color:red">No summary provided.</p>';
-    } else {
-      const decoded = decodeURIComponent(summaryRaw);
-      summaryDiv.innerHTML = decoded;
+const status = document.getElementById("status");
+if (totalNok > 0) {
+  status.innerHTML = "<b class='nok'>⚠️ Alert: There are " + totalNok + " NOK parts!</b>";
+} else {
+  status.innerHTML = "<b class='ok'>✅ All parts are OK!</b>";
+}
 
-      // Extract NOK values and sum
-      const nokRegex = /<b>NOK(?: \d)?:<\/b>\s*(\d+)/g;
-      let match, totalNok = 0;
-      while ((match = nokRegex.exec(decoded)) !== null) {
-        totalNok += parseInt(match[1]);
-      }
+const qr = new QRious({
+  element: document.getElementById('qrcode'),
+  value: window.location.href,
+  size: 200,
+  level: 'H'
+});
 
-      if (totalNok > 0) {
-        statusDiv.innerHTML = '<div class="alert-nok">\u26a0\ufe0f NOK detected: ' + totalNok + ' parts must be scrapped.</div>';
-      } else {
-        statusDiv.innerHTML = '<div class="alert-ok">\u2705 All parts OK - no scrap detected.</div>';
-      }
-
-      const qrcode = document.getElementById("qrcode");
-      qrcode.src = "https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=" + encodeURIComponent(window.location.href);
-    }
   </script>
 </body>
 </html>
