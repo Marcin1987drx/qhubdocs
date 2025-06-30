@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Redirecting...</title>
+  <script>
+    window.onload = function () {
+      const summary = decodeURIComponent(new URLSearchParams(window.location.search).get("summary") || "");
+      if (summary.length > 0) {
+        // przekazujemy dane do window.name (działa między stronami w tej samej domenie)
+        window.name = summary;
+        window.location.href = "overview.html";
+      } else {
+        document.body.innerHTML = "<h3>Brak danych do przekazania.</h3>";
+      }
+    };
+  </script>
+</head>
+<body>
+  <p>Przekazywanie danych...</p>
+</body>
+</html>
