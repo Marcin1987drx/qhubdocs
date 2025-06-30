@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,7 +8,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
+      font-family: 'Segoe UI', 'Roboto', sans-serif;
       margin: 40px;
       background-color: #f9f9f9;
       color: #333;
@@ -29,13 +30,37 @@
     .grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 24px;
+      gap: 32px;
       margin-top: 30px;
+    }
+    .section {
+      background: white;
+      border-radius: 12px;
+      padding: 20px 24px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
     }
     .section-title {
       color: #0078d4;
-      margin-bottom: 10px;
       font-weight: 600;
+      margin-bottom: 16px;
+      font-size: 18px;
+    }
+    .data-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 6px 0;
+      border-bottom: 1px solid #eee;
+    }
+    .data-row:last-child {
+      border-bottom: none;
+    }
+    .data-label {
+      font-weight: 500;
+      color: #555;
+    }
+    .data-value {
+      font-weight: 400;
+      color: #222;
     }
     .footer {
       margin-top: 40px;
@@ -55,6 +80,7 @@
       font-weight: bold;
       text-align: center;
       margin-top: 30px;
+      border-radius: 8px;
     }
     .print-button {
       position: fixed;
@@ -100,40 +126,38 @@
   </div>
 
   <div class="grid">
-    <div>
+    <div class="section">
       <div class="section-title">📦 General Info</div>
-      <div><b>SAP Number:</b> <span id="sapnumber"></span></div>
-      <div><b>Revision:</b> <span id="revision"></span></div>
-      <div><b>Part Number:</b> <span id="partnumber"></span></div>
-      <div><b>Supplier:</b> <span id="supplier"></span></div>
-      <div><b>Delivery Note:</b> <span id="deliverynote"></span></div>
-      <div><b>Order Number:</b> <span id="ordernumber"></span></div>
-      <div><b>Delivery Date:</b> <span id="deliverydate"></span></div>
-      <br>
-      <div class="section-title">📊 Quantity Overview</div>
-      <div><b>Inspection Date:</b> <span id="inspectiondate"></span></div>
-      <div><b>Total Qty:</b> <span id="totalqty"></span></div>
-      <div><b>i.O.:</b> <span id="io"></span></div>
-      <div><b>n.i.O.:</b> <span id="nio"></span></div>
-      <div><b>Reworked:</b> <span id="reworked"></span></div>
+      <div class="data-row"><div class="data-label">SAP Number:</div><div class="data-value" id="sapnumber"></div></div>
+      <div class="data-row"><div class="data-label">Revision:</div><div class="data-value" id="revision"></div></div>
+      <div class="data-row"><div class="data-label">Part Number:</div><div class="data-value" id="partnumber"></div></div>
+      <div class="data-row"><div class="data-label">Supplier:</div><div class="data-value" id="supplier"></div></div>
+      <div class="data-row"><div class="data-label">Delivery Note:</div><div class="data-value" id="deliverynote"></div></div>
+      <div class="data-row"><div class="data-label">Order Number:</div><div class="data-value" id="ordernumber"></div></div>
+      <div class="data-row"><div class="data-label">Delivery Date:</div><div class="data-value" id="deliverydate"></div></div>
+      <div class="section-title" style="margin-top:24px;">📊 Quantity Overview</div>
+      <div class="data-row"><div class="data-label">Inspection Date:</div><div class="data-value" id="inspectiondate"></div></div>
+      <div class="data-row"><div class="data-label">Total Qty:</div><div class="data-value" id="totalqty"></div></div>
+      <div class="data-row"><div class="data-label">i.O.:</div><div class="data-value" id="io"></div></div>
+      <div class="data-row"><div class="data-label">n.i.O.:</div><div class="data-value" id="nio"></div></div>
+      <div class="data-row"><div class="data-label">Reworked:</div><div class="data-value" id="reworked"></div></div>
     </div>
-    <div>
+    <div class="section">
       <div class="section-title">🚫 Defects Summary</div>
-      <div><b>Defect 1:</b> <span id="defect1"></span></div>
-      <div><b>Raster 1:</b> <span id="raster1"></span></div>
-      <div><b>NOK 1:</b> <span id="nok1"></span></div>
-      <div><b>Reworked 1:</b> <span id="reworked1"></span></div>
-      <div><b>Defect 2:</b> <span id="defect2"></span></div>
-      <div><b>Raster 2:</b> <span id="raster2"></span></div>
-      <div><b>NOK 2:</b> <span id="nok2"></span></div>
-      <div><b>Reworked 2:</b> <span id="reworked2"></span></div>
-      <div><b>Defect 3:</b> <span id="defect3"></span></div>
-      <div><b>Raster 3:</b> <span id="raster3"></span></div>
-      <div><b>NOK 3:</b> <span id="nok3"></span></div>
-      <div><b>Reworked 3:</b> <span id="reworked3"></span></div>
-      <br>
-      <div class="section-title">📝 Comments</div>
-      <div><b>QS Comment:</b> <span id="comment"></span></div>
+      <div class="data-row"><div class="data-label">Defect 1:</div><div class="data-value" id="defect1"></div></div>
+      <div class="data-row"><div class="data-label">Raster 1:</div><div class="data-value" id="raster1"></div></div>
+      <div class="data-row"><div class="data-label">NOK 1:</div><div class="data-value" id="nok1"></div></div>
+      <div class="data-row"><div class="data-label">Reworked 1:</div><div class="data-value" id="reworked1"></div></div>
+      <div class="data-row"><div class="data-label">Defect 2:</div><div class="data-value" id="defect2"></div></div>
+      <div class="data-row"><div class="data-label">Raster 2:</div><div class="data-value" id="raster2"></div></div>
+      <div class="data-row"><div class="data-label">NOK 2:</div><div class="data-value" id="nok2"></div></div>
+      <div class="data-row"><div class="data-label">Reworked 2:</div><div class="data-value" id="reworked2"></div></div>
+      <div class="data-row"><div class="data-label">Defect 3:</div><div class="data-value" id="defect3"></div></div>
+      <div class="data-row"><div class="data-label">Raster 3:</div><div class="data-value" id="raster3"></div></div>
+      <div class="data-row"><div class="data-label">NOK 3:</div><div class="data-value" id="nok3"></div></div>
+      <div class="data-row"><div class="data-label">Reworked 3:</div><div class="data-value" id="reworked3"></div></div>
+      <div class="section-title" style="margin-top:24px;">📝 Comments</div>
+      <div class="data-row"><div class="data-label">QS Comment:</div><div class="data-value" id="comment"></div></div>
     </div>
   </div>
 
@@ -155,7 +179,6 @@
   <script>
     const params = new URLSearchParams(window.location.search);
     const fill = (id, name) => document.getElementById(id).textContent = params.get(name) || '-';
-
     const fields = [
       'sapnumber', 'revision', 'partnumber', 'supplier', 'deliverynote', 'ordernumber', 'deliverydate',
       'inspectiondate', 'totalqty', 'io', 'nio', 'reworked',
@@ -164,18 +187,14 @@
       'defect3', 'raster3', 'nok3', 'reworked3',
       'comment'
     ];
-
     fields.forEach(field => fill(field, field));
-
     const nio = parseInt(params.get('nio') || '0');
     if (nio > 0) document.getElementById('alertBox').style.display = 'block';
-
     const qr = new QRious({
       element: document.getElementById('qr'),
       value: window.location.href,
       size: 150,
     });
-
     document.getElementById('timestamp').textContent = new Date().toLocaleString();
   </script>
 </body>
