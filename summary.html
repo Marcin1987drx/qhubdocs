@@ -1,130 +1,150 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Inspection Summary</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
       margin: 40px;
+      background-color: #f8f9fa;
       color: #333;
     }
-    header {
+    .header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 30px;
     }
-    h1 {
+    .logos img {
+      height: 50px;
+    }
+    h1.title {
+      text-align: center;
       color: #0078d4;
-      margin-bottom: 10px;
+      margin-top: 30px;
+      font-size: 28px;
     }
-    .section {
+    .grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 24px;
-      margin-bottom: 30px;
+      margin-top: 30px;
     }
-    .section b {
+    .section-title {
       color: #0078d4;
+      margin-bottom: 10px;
     }
-    .alert {
-      border: 2px dashed red;
-      padding: 15px;
-      background-color: #ffe6e6;
-      color: darkred;
-      font-weight: bold;
-      margin-top: 20px;
-    }
-    footer {
+    .footer {
       margin-top: 40px;
-      font-size: 0.9em;
+      font-size: 12px;
+      text-align: center;
       color: gray;
     }
-    #qr {
-      margin: 20px 0;
+    .qr {
+      text-align: center;
+      margin-top: 40px;
+    }
+    .alert {
+      border: 2px dashed #c0392b;
+      background-color: #fdecea;
+      padding: 20px;
+      color: #c0392b;
+      font-weight: bold;
+      text-align: center;
+      margin-top: 30px;
     }
   </style>
 </head>
-<body> <header>
-    <img src="https://raw.githubusercontent.com/marcin1987drx/qhubdocs/main/assets/qhub-logo.png" alt="QualityHub Logo" height="40">
-    <img src="https://raw.githubusercontent.com/marcin1987drx/qhubdocs/main/assets/draex-logo.png" alt="DRÄXLMAIER Logo" height="40">
-  </header> <h1>Inspection Summary</h1> <div id="errorAlert" class="alert" style="display: none">
-    🚨 Wykryto niezgodności! Cześć trafi do Verschrott!
-  </div> <div class="section">
+<body>
+  <div class="header">
+    <div class="logos">
+      <img src="https://raw.githubusercontent.com/marcin1987drx/qhubdocs/main/assets/qhublogo.png" alt="QHub Logo">
+    </div>
+    <div class="logos">
+      <img src="https://raw.githubusercontent.com/marcin1987drx/qhubdocs/main/assets/draexlmaierlogo.png" alt="Draexlmaier Logo">
+    </div>
+  </div>
+
+  <h1 class="title">Inspection Summary</h1>
+
+  <div id="alertBox" class="alert" style="display:none">
+    Wykryto niezgodności! Część może trafić do Verschrott!!
+  </div>
+
+  <div class="grid">
     <div>
-      <b>📦 General Info</b><br>
-      <div id="sap"></div>
-      <div id="rev"></div>
-      <div id="part"></div>
-      <div id="supplier"></div>
-      <div id="delnote"></div>
-      <div id="orderno"></div>
-      <div id="deldate"></div>
+      <div class="section-title">📦 General Info</div>
+      <div><b>SAP Number:</b> <span id="sapnumber"></span></div>
+      <div><b>Revision:</b> <span id="revision"></span></div>
+      <div><b>Part Number:</b> <span id="partnumber"></span></div>
+      <div><b>Supplier:</b> <span id="supplier"></span></div>
+      <div><b>Delivery Note:</b> <span id="deliverynote"></span></div>
+      <div><b>Order Number:</b> <span id="ordernumber"></span></div>
+      <div><b>Delivery Date:</b> <span id="deliverydate"></span></div>
       <br>
-      <b>📊 Quantity Overview</b><br>
-      <div id="insdate"></div>
-      <div id="qty"></div>
-      <div id="ok"></div>
-      <div id="nok"></div>
-      <div id="reworked"></div>
+      <div class="section-title">📊 Quantity Overview</div>
+      <div><b>Inspection Date:</b> <span id="inspectiondate"></span></div>
+      <div><b>Total Qty:</b> <span id="totalqty"></span></div>
+      <div><b>i.O.:</b> <span id="io"></span></div>
+      <div><b>n.i.O.:</b> <span id="nio"></span></div>
+      <div><b>Reworked:</b> <span id="reworked"></span></div>
     </div>
     <div>
-      <b>❌ Defects Summary</b><br>
-      <div id="defects"></div>
+      <div class="section-title">🚫 Defects Summary</div>
+      <div><b>Defect 1:</b> <span id="defect1"></span></div>
+      <div><b>Raster 1:</b> <span id="raster1"></span></div>
+      <div><b>NOK 1:</b> <span id="nok1"></span></div>
+      <div><b>Reworked 1:</b> <span id="reworked1"></span></div>
+      <div><b>Defect 2:</b> <span id="defect2"></span></div>
+      <div><b>Raster 2:</b> <span id="raster2"></span></div>
+      <div><b>NOK 2:</b> <span id="nok2"></span></div>
+      <div><b>Reworked 2:</b> <span id="reworked2"></span></div>
+      <div><b>Defect 3:</b> <span id="defect3"></span></div>
+      <div><b>Raster 3:</b> <span id="raster3"></span></div>
+      <div><b>NOK 3:</b> <span id="nok3"></span></div>
+      <div><b>Reworked 3:</b> <span id="reworked3"></span></div>
+      <br>
+      <div class="section-title">📝 Comments</div>
+      <div><b>QS Comment:</b> <span id="comment"></span></div>
     </div>
-  </div><b>📜 Comments</b><br>
+  </div>
 
-  <div id="comments"></div><br><b>📌 Attachments</b><br> <small>Pliki załączone poniżej 👇</small><br>
+  <div class="qr">
+    <canvas id="qr"></canvas>
+  </div>
 
-  <div id="qr"></div> <footer>
-    Generated by QualityHub | <span id="printTime"></span>
-  </footer> <script>
+  <div class="footer">
+    Generated by QualityHub | Printed: <span id="timestamp"></span>
+  </div>
+
+  <script>
     const params = new URLSearchParams(window.location.search);
 
-    const mapField = (id, label, value) => {
-      if (value) document.getElementById(id).innerHTML = `<b>${label}:</b> ${value}<br>`;
-    };
+    const fill = (id, name) => document.getElementById(id).textContent = params.get(name) || '-';
 
-    mapField("sap", "SAP Number", params.get("sapnumber"));
-    mapField("rev", "Revision", params.get("revision"));
-    mapField("part", "Part Number", params.get("partnumber"));
-    mapField("supplier", "Supplier", params.get("supplier"));
-    mapField("delnote", "Delivery Note", params.get("deliverynote"));
-    mapField("orderno", "Order Number", params.get("ordernumber"));
-    mapField("deldate", "Delivery Date", params.get("deliverydate"));
-    mapField("insdate", "Inspection Date", params.get("inspectiondate"));
-    mapField("qty", "Total Qty", params.get("totalqty"));
-    mapField("ok", "i.O.", params.get("okqty"));
-    mapField("nok", "n.i.O.", params.get("nokqty"));
-    mapField("reworked", "Reworked", params.get("reworkedqty"));
-    mapField("comments", "QS Comment", params.get("comments"));
+    const fields = [
+      'sapnumber', 'revision', 'partnumber', 'supplier', 'deliverynote', 'ordernumber', 'deliverydate',
+      'inspectiondate', 'totalqty', 'io', 'nio', 'reworked',
+      'defect1', 'raster1', 'nok1', 'reworked1',
+      'defect2', 'raster2', 'nok2', 'reworked2',
+      'defect3', 'raster3', 'nok3', 'reworked3',
+      'comment'
+    ];
 
-    // Defects list
-    const defects = document.getElementById("defects");
-    for (let i = 1; i <= 3; i++) {
-      const def = params.get(`defect${i}`);
-      const ras = params.get(`raster${i}`);
-      const nok = params.get(`nok${i}`);
-      const rew = params.get(`reworked${i}`);
-      if (def || ras || nok || rew) {
-        defects.innerHTML += `<b>Defect ${i}:</b> ${def || "-"}<br>`;
-        defects.innerHTML += `<b>Raster ${i}:</b> ${ras || "-"}<br>`;
-        defects.innerHTML += `<b>NOK ${i}:</b> ${nok || "0"}<br>`;
-        defects.innerHTML += `<b>Reworked ${i}:</b> ${rew || "0"}<br><br>`;
-      }
-    }
+    fields.forEach(field => fill(field, field));
 
-    // QR Code
-    const qrContent = window.location.href;
-    const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=${encodeURIComponent(qrContent)}`;
-    document.getElementById("qr").innerHTML = `<img src='${qrUrl}' alt='QR Code'>`;
+    const nio = parseInt(params.get('nio') || '0');
+    if (nio > 0) document.getElementById('alertBox').style.display = 'block';
 
-    // Alert for NOK > 0
-    if (parseInt(params.get("nokqty")) > 0) {
-      document.getElementById("errorAlert").style.display = "block";
-    }
+    const qr = new QRious({
+      element: document.getElementById('qr'),
+      value: window.location.href,
+      size: 150,
+    });
 
-    // Footer timestamp
-    document.getElementById("printTime").innerText = `Printed: ${new Date().toLocaleString()}`;
-  </script></body>
+    document.getElementById('timestamp').textContent = new Date().toLocaleString();
+  </script>
+</body>
 </html>
