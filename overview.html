@@ -1,85 +1,82 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pl">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Inspection Summary</title>
+  <link rel="icon" href="qualityhub.png" />
   <style>
     body {
-      font-family: Arial, sans-serif;
-      margin: 40px;
+      font-family: 'Segoe UI', sans-serif;
+      padding: 32px;
       color: #333;
-      background-color: #fff;
     }
-
-    h1 {
-      margin-top: 0;
-      font-size: 28px;
-    }
-
     .header {
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      border-bottom: 2px solid #ccc;
-      padding-bottom: 10px;
+      margin-bottom: 20px;
     }
-
-    .logo {
+    .header img {
+      height: 40px;
+      margin-right: 16px;
+    }
+    .status-ok {
+      color: green;
+      font-weight: bold;
+      font-size: 18px;
+    }
+    .status-nok {
+      color: red;
+      font-weight: bold;
+      font-size: 18px;
+    }
+    iframe {
+      display: block;
+      width: 100%;
       height: 80px;
-      object-fit: contain;
-    }
-
-    #printSummary {
-      margin-top: 30px;
-      font-size: 14px;
-      color: #222;
-    }
-
-    .footer {
-      margin-top: 40px;
-      font-size: 12px;
-      color: #aaa;
-      text-align: center;
+      border: none;
+      margin-top: 16px;
     }
   </style>
 </head>
 <body>
   <div class="header">
-    <img src="https://raw.githubusercontent.com/marcin1987drx/qhubdocs/main/qualityhub.png" alt="QHub Logo" class="logo">
-    <img src="https://raw.githubusercontent.com/marcin1987drx/qhubdocs/main/draexlmaier.png" alt="Draexlmaier Logo" class="logo">
+    <img src="qualityhub.png" alt="QualityHub" />
+    <h2>Inspection Summary</h2>
   </div>
 
-  <h1>Inspection Summary</h1>
+  <div id="summaryContent">Ładowanie...</div>
 
-  <div id="printSummary">
-    <p style="color:gray;">Czekam na dane z formularza Power Apps...</p>
-  </div>
+  <div id="status"></div>
+  <iframe id="qrcode" src=""></iframe>
 
-  <div class="footer">
-    Powered by QualityHub • Printed: <span id="printDate"></span>
-  </div>
+  <footer style="margin-top: 40px; font-size: 12px; color: #aaa;">
+    Powered by QualityHub · Printed: <span id="timestamp"></span>
+  </footer>
 
   <script>
-    function getParam(name) {
-      const urlParams = new URLSearchParams(window.location.search);
-      return urlParams.get(name) || '';
-    }
+    const urlParams = new URLSearchParams(window.location.search);
+    const summary = urlParams.get("summary");
+    const summaryDiv = document.getElementById("summaryContent");
+    const timestamp = new Date().toLocaleString();
 
-    window.addEventListener("load", function () {
-      const summary = getParam("summary");
+    document.getElementById("timestamp").textContent = timestamp;
+
+    if (!summary) {
+      summaryDiv.innerHTML = "<p style='color:red;'>Brak danych do wyświetlenia. Upewnij się, że formularz został przesłany.</p>";
+    } else {
       const decoded = decodeURIComponent(summary);
-      const target = document.getElementById("printSummary");
+      summaryDiv.innerHTML = decoded;
 
-      if (decoded && target) {
-        target.innerHTML = decoded;
+      // Sprawdź ilość NOKów (prosty warunek szukający tekstu "n.i.O.:" różnego od 0)
+      if (decoded.includes("n.i.O.:</b> 0")) {
+        document.getElementById("status").innerHTML = "<div class='status-ok'>✔️ Wszystkie części OK</div>";
       } else {
-        target.innerHTML = "<p style='color:red;'>Brak danych do wyświetlenia. Upewnij się, że formularz został przesłany.</p>";
+        document.getElementById("status").innerHTML = "<div class='status-nok'>⚠️ Wykryto niezgodności. Część trafi do Verschrott!</div>";
       }
 
-      // Set print date
-      const now = new Date();
-      document.getElementById("printDate").innerText = now.toLocaleString();
-    });
+      // QR kod generowany przez zewnętrzną usługę
+      document.getElementById("qrcode").src = "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=" + encodeURIComponent(window.location.href);
+    }
   </script>
 </body>
 </html>
