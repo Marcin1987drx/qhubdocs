@@ -1,22 +1,103 @@
-<!DOCTYPE html>
-<html>
+<!DOCTYPE html><html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Redirecting...</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Inspection Summary</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 40px;
+      background-color: #f9f9f9;
+      color: #333;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid #0078d4;
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+    }
+    .header img {
+      height: 60px;
+    }
+    .title {
+      font-size: 28px;
+      font-weight: bold;
+    }
+    .status {
+      padding: 10px;
+      font-weight: bold;
+      text-align: center;
+      border-radius: 5px;
+      margin-bottom: 20px;
+    }
+    .status.ok {
+      background-color: #dff0d8;
+      color: #3c763d;
+    }
+    .status.nok {
+      background-color: #f2dede;
+      color: #a94442;
+    }
+    .content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 20px;
+    }
+    .section b {
+      color: #0078d4;
+    }
+    .qr {
+      margin-top: 20px;
+    }
+    .footer {
+      margin-top: 30px;
+      font-size: 12px;
+      color: #aaa;
+      text-align: center;
+    }
+  </style>
   <script>
     window.onload = function () {
-      const summary = decodeURIComponent(new URLSearchParams(window.location.search).get("summary") || "");
-      if (summary.length > 0) {
-        // przekazujemy dane do window.name (działa między stronami w tej samej domenie)
-        window.name = summary;
-        window.location.href = "overview.html";
-      } else {
-        document.body.innerHTML = "<h3>Brak danych do przekazania.</h3>";
-      }
-    };
+      const params = new URLSearchParams(window.location.search);
+      const summaryHtml = params.get('summary');
+      if (summaryHtml) {
+        document.getElementById('summary').innerHTML = decodeURIComponent(summaryHtml);// Sprawdź ilość NOK:
+    const match = summaryHtml.match(/<b>n\.i\.O\.:<\/b>\s*(\d+)/i);
+    const nokValue = match ? parseInt(match[1]) : 0;
+
+    const statusEl = document.getElementById('status');
+    if (nokValue > 0) {
+      statusEl.className = 'status nok';
+      statusEl.innerText = `❌ Defects detected – SCRAP`; 
+    } else {
+      statusEl.className = 'status ok';
+      statusEl.innerText = `✅ No defects detected – Approved`;
+    }
+
+    // QR kod:
+    const qr = document.getElementById('qr');
+    const qrUrl = window.location.href;
+    qr.src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(qrUrl)}`;
+  }
+};
+
   </script>
 </head>
 <body>
-  <p>Przekazywanie danych...</p>
+  <div class="header">
+    <img src="qualityhub.png" alt="QualityHub Logo">
+    <div class="title">Inspection Summary</div>
+    <img src="draexlmaier.png" alt="Draexlmaier Logo">
+  </div> <div id="status" class="status">Loading status...</div> <div id="summary" class="content">
+    <!-- Dane zostaną podstawione z parametru URL -->
+  </div> <div class="qr">
+    <b>QR Code:</b><br>
+    <img id="qr" src="" alt="QR Code" />
+  </div> <div class="footer">
+    Powered by QualityHub – Printed: <script>document.write(new Date().toLocaleString())</script>
+  </div>
 </body>
 </html>
