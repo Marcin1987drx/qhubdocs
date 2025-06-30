@@ -1,109 +1,176 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>QualityHub Summary PDF</title>
-  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet" />
+  <meta charset="UTF-8">
+  <title>Inspection Summary</title>
   <style>
     body {
-      font-family: 'Open Sans', sans-serif;
-      padding: 40px;
-      background: #f7f9fc;
+      font-family: Arial, sans-serif;
+      margin: 40px;
       color: #333;
     }
-    header {
+
+    h1, h2, h3 {
+      margin-top: 0;
+    }
+
+    .header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 2px solid #0078d4;
+      border-bottom: 2px solid #ccc;
       padding-bottom: 10px;
-      margin-bottom: 20px;
     }
+
     .logo {
       height: 40px;
     }
-    h1 {
-      font-size: 24px;
-      color: #0078d4;
-    }
-    section {
-      margin-bottom: 30px;
-    }
-    .section-title {
-      font-weight: 700;
-      color: #0078d4;
-      margin-bottom: 10px;
-    }
-    .row {
-      display: flex;
-      gap: 50px;
-    }
-    .column {
-      flex: 1;
-    }
-    label {
+
+    .summary-status {
+      padding: 15px;
+      border-radius: 8px;
+      color: white;
       font-weight: bold;
-    }
-    .value {
-      margin-bottom: 8px;
-    }
-    #qrcode {
       margin-top: 20px;
     }
-    .verschrott-label {
-      border: 2px dashed #c00;
-      padding: 20px;
-      margin-top: 40px;
-      background: #fff0f0;
+
+    .ok {
+      background-color: #4caf50;
+    }
+
+    .error {
+      background-color: #f44336;
+    }
+
+    .info-section {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+
+    .info-box {
+      width: 48%;
+    }
+
+    .info-box p {
+      margin: 6px 0;
+    }
+
+    .qr-section {
+      margin-top: 20px;
+    }
+
+    .qr-section img {
+      height: 100px;
+    }
+
+    .defects-table {
+      margin-top: 30px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px;
       text-align: center;
     }
-    .verschrott-label h2 {
-      margin: 0;
+
+    th {
+      background-color: #eee;
+    }
+
+    .label-verschrotten {
+      border: 2px dashed #c00;
       color: #c00;
+      text-align: center;
+      font-size: 18px;
+      padding: 20px;
+      margin-top: 40px;
+    }
+
+    .legend {
+      margin-top: 20px;
+      font-size: 14px;
+    }
+
+    .legend span {
+      display: inline-block;
+      margin-right: 20px;
     }
   </style>
 </head>
 <body>
-  <header>
-    <img src="https://yourdomain.com/assets/qhub_logo.png" alt="QHub Logo" class="logo" />
-    <img src="https://yourdomain.com/assets/draexlmaier_logo.png" alt="Draexlmaier Logo" class="logo" />
-  </header> <h1>Inspection Summary</h1> <section>
-    <div class="section-title">General Info</div>
-    <div class="row">
-      <div class="column">
-        <div class="value"><label>SAP Number:</label> <span id="sapNumber"></span></div>
-        <div class="value"><label>Revision:</label> <span id="revision"></span></div>
-        <div class="value"><label>Part Number:</label> <span id="partNumber"></span></div>
-        <div class="value"><label>Supplier:</label> <span id="supplier"></span></div>
-      </div>
-      <div class="column">
-        <div class="value"><label>Order Number:</label> <span id="orderNumber"></span></div>
-        <div class="value"><label>Delivery Date:</label> <span id="deliveryDate"></span></div>
-        <div class="value"><label>Total Qty:</label> <span id="totalQty"></span></div>
-      </div>
+  <div class="header">
+    <img src="qhub-logo.png" alt="QHub Logo" class="logo">
+    <img src="draex-logo.png" alt="Draexlmaier Logo" class="logo">
+  </div>
+
+  <h1>Inspection Summary</h1>
+
+  <div class="summary-status ok">✔️ No defects detected – Approved</div>
+  <!-- Jeśli są błędy, zmień klasę na 'error' i tekst -->
+  <!-- <div class="summary-status error">❌ DEFECTS DETECTED</div> -->
+
+  <div class="info-section">
+    <div class="info-box">
+      <p><strong>SAP Number:</strong> 123456</p>
+      <p><strong>Revision:</strong> B</p>
+      <p><strong>Part Number:</strong> 8765-PLX</p>
+      <p><strong>Supplier:</strong> AutoTech GmbH</p>
     </div>
-  </section> <section>
-    <div class="section-title">QR Code</div>
-    <div id="qrcode"></div>
-  </section> <section class="verschrott-label">
+    <div class="info-box">
+      <p><strong>Order Number:</strong> PO98765</p>
+      <p><strong>Delivery Date:</strong> 2025-06-30</p>
+      <p><strong>Total Qty:</strong> 25</p>
+    </div>
+  </div>
+
+  <div class="qr-section">
+    <h3>QR Code</h3>
+    <img src="qr-code.png" alt="QR Code">
+  </div>
+
+  <div class="defects-table">
+    <h3>Defect Summary</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Fehlercode</th>
+          <th>Description</th>
+          <th>Qty</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>FC01</td>
+          <td>Broken pin</td>
+          <td>2</td>
+          <td>Scrap</td>
+        </tr>
+        <tr>
+          <td>FC02</td>
+          <td>Missing clip</td>
+          <td>1</td>
+          <td>Rework</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="legend">
+    <span>🟩 OK</span>
+    <span>🟨 Rework</span>
+    <span>🟥 Scrap</span>
+  </div>
+
+  <div class="label-verschrotten">
     <h2>VERSCHROTTEN</h2>
     <p>Label for parts to be scrapped</p>
-  </section> <script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script> <script>
-    const params = new URLSearchParams(window.location.search);
-    const data = JSON.parse(decodeURIComponent(params.get("data")));
-
-    document.getElementById("sapNumber").textContent = data.sapNumber;
-    document.getElementById("revision").textContent = data.revision;
-    document.getElementById("partNumber").textContent = data.partNumber;
-    document.getElementById("supplier").textContent = data.supplier;
-    document.getElementById("orderNumber").textContent = data.orderNumber;
-    document.getElementById("deliveryDate").textContent = data.deliveryDate;
-    document.getElementById("totalQty").textContent = data.totalQty;
-
-    new QRCode(document.getElementById("qrcode"), {
-      text: data.sapNumber + "-" + data.partNumber,
-      width: 128,
-      height: 128,
-    });
-  </script></body>
+  </div>
+</body>
 </html>
