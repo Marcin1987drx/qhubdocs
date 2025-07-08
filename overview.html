@@ -1,200 +1,121 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Inspection Summary</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+  <title>Summary V2</title>
+  <script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
   <style>
     body {
-      font-family: 'Segoe UI', 'Roboto', sans-serif;
-      margin: 40px;
-      background-color: #f9f9f9;
+      font-family: 'Open Sans', sans-serif;
+      font-size: 14px;
       color: #333;
+      padding: 32px;
     }
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .logos img {
-      height: 150px;
-    }
-    h1.title {
-      text-align: center;
+    h2 {
       color: #0078d4;
-      margin-top: 30px;
-      font-size: 28px;
     }
     .grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 32px;
-      margin-top: 30px;
+      gap: 24px;
     }
     .section {
-      background: white;
-      border-radius: 12px;
-      padding: 20px 24px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      margin-bottom: 32px;
     }
-    .section-title {
-      color: #0078d4;
-      font-weight: 600;
-      margin-bottom: 16px;
-      font-size: 18px;
+    .field b {
+      display: inline-block;
+      min-width: 280px;
     }
-    .data-row {
-      display: flex;
-      justify-content: space-between;
-      padding: 6px 0;
-      border-bottom: 1px solid #eee;
-    }
-    .data-row:last-child {
-      border-bottom: none;
-    }
-    .data-label {
-      font-weight: 500;
-      color: #555;
-    }
-    .data-value {
-      font-weight: 400;
-      color: #222;
-    }
-    .footer {
-      margin-top: 40px;
-      font-size: 12px;
-      text-align: center;
-      color: gray;
-    }
-    .qr {
-      text-align: center;
-      margin-top: 40px;
-    }
-    .alert {
-      border: 2px dashed #c0392b;
-      background-color: #fdecea;
-      padding: 20px;
-      color: #c0392b;
-      font-weight: bold;
-      text-align: center;
-      margin-top: 30px;
-      border-radius: 8px;
-    }
-    .print-button {
-      position: fixed;
-      bottom: 30px;
-      right: 30px;
-      background-color: #0078d4;
-      color: white;
-      border: none;
-      border-radius: 50px;
-      padding: 12px 20px;
-      font-size: 16px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      transition: background-color 0.3s ease;
-    }
-    .print-button:hover {
-      background-color: #005fa3;
-    }
-    .print-button svg {
-      width: 20px;
-      height: 20px;
-      fill: white;
+    #alertBox {
+      display: none;
+      background: #ffd700;
+      padding: 16px;
+      border: 1px solid #333;
+      margin-top: 20px;
     }
   </style>
 </head>
 <body>
-  <div class="header">
-    <div class="logos">
-      <img src="https://marcin1987drx.github.io/qhubdocs/qualityhub.png" alt="QHub Logo">
+  <div class="section grid">
+    <div>
+      <h2>📦 General Info</h2>
+      <div class="field"><b>Part name:</b> <span id="partname"></span></div>
+      <div class="field"><b>DMC Code EOL Protokoll:</b> <span id="dmceol"></span></div>
+      <div class="field"><b>DMC Code Ladedose:</b> <span id="dmcladedose"></span></div>
+      <div class="field"><b>Part Identification:</b> <span id="partid"></span></div>
+      <div class="field"><b>Verwendungszweck:</b> <span id="verwendungszweck"></span></div>
+      <div class="field"><b>Dichtiskeitprufung:</b> <span id="dichtiskeit"></span></div>
     </div>
-    <div class="logos">
-      <img src="https://marcin1987drx.github.io/qhubdocs/draexlmaier.png" alt="Draexlmaier Logo">
-    </div>
-  </div>
-
-  <h1 class="title">Inspection Summary</h1>
-
-  <div id="alertBox" class="alert" style="display:none">
-    Detected nonconformities! The part may be sent to Sperrlager. It might also be scrapped (Verschrott)!
-  </div>
-
-  <div class="grid">
-    <div class="section">
-      <div class="section-title">📦 General Info</div>
-      <div class="data-row"><div class="data-label">SAP Number:</div><div class="data-value" id="sapnumber"></div></div>
-      <div class="data-row"><div class="data-label">Revision:</div><div class="data-value" id="revision"></div></div>
-      <div class="data-row"><div class="data-label">Part Number:</div><div class="data-value" id="partnumber"></div></div>
-      <div class="data-row"><div class="data-label">Supplier:</div><div class="data-value" id="supplier"></div></div>
-      <div class="data-row"><div class="data-label">Delivery Note:</div><div class="data-value" id="deliverynote"></div></div>
-      <div class="data-row"><div class="data-label">Order Number:</div><div class="data-value" id="ordernumber"></div></div>
-      <div class="data-row"><div class="data-label">Delivery Date:</div><div class="data-value" id="deliverydate"></div></div>
-      <div class="section-title" style="margin-top:24px;">📊 Quantity Overview</div>
-      <div class="data-row"><div class="data-label">Inspection Date:</div><div class="data-value" id="inspectiondate"></div></div>
-      <div class="data-row"><div class="data-label">Total Qty:</div><div class="data-value" id="totalqty"></div></div>
-      <div class="data-row"><div class="data-label">i.O.:</div><div class="data-value" id="io"></div></div>
-      <div class="data-row"><div class="data-label">n.i.O.:</div><div class="data-value" id="nio"></div></div>
-      <div class="data-row"><div class="data-label">Reworked:</div><div class="data-value" id="reworked"></div></div>
-    </div>
-    <div class="section">
-      <div class="section-title">🚫 Defects Summary</div>
-      <div class="data-row"><div class="data-label">Defect 1:</div><div class="data-value" id="defect1"></div></div>
-      <div class="data-row"><div class="data-label">Raster 1:</div><div class="data-value" id="raster1"></div></div>
-      <div class="data-row"><div class="data-label">NOK 1:</div><div class="data-value" id="nok1"></div></div>
-      <div class="data-row"><div class="data-label">Reworked 1:</div><div class="data-value" id="reworked1"></div></div>
-      <div class="data-row"><div class="data-label">Defect 2:</div><div class="data-value" id="defect2"></div></div>
-      <div class="data-row"><div class="data-label">Raster 2:</div><div class="data-value" id="raster2"></div></div>
-      <div class="data-row"><div class="data-label">NOK 2:</div><div class="data-value" id="nok2"></div></div>
-      <div class="data-row"><div class="data-label">Reworked 2:</div><div class="data-value" id="reworked2"></div></div>
-      <div class="data-row"><div class="data-label">Defect 3:</div><div class="data-value" id="defect3"></div></div>
-      <div class="data-row"><div class="data-label">Raster 3:</div><div class="data-value" id="raster3"></div></div>
-      <div class="data-row"><div class="data-label">NOK 3:</div><div class="data-value" id="nok3"></div></div>
-      <div class="data-row"><div class="data-label">Reworked 3:</div><div class="data-value" id="reworked3"></div></div>
-      <div class="section-title" style="margin-top:24px;">📝 Comments</div>
-      <div class="data-row"><div class="data-label">QS Comment:</div><div class="data-value" id="comment"></div></div>
+    <div>
+      <h2>🔍🛠️ Visual & Assembly Check</h2>
+      <div class="field"><b>Nacharbeiten:</b> <span id="nacharbeiten"></span></div>
+      <div class="field"><b>Aufkleber und Labels:</b> <span id="labels"></span></div>
+      <div class="field"><b>Buchsen / Kontaktbuchsen:</b> <span id="buchsen"></span></div>
+      <div class="field"><b>PE-Leitungssatz verbaut?:</b> <span id="peleitung"></span></div>
+      <div class="field"><b>Aktuatorpin eingefahren?:</b> <span id="pinaktivator"></span></div>
+      <div class="field"><b>Schiefstellung Pins/Buchsen:</b> <span id="schiefstellung"></span></div>
+      <div class="field"><b>Deckelverrastungen:</b> <span id="deckelverrastet"></span></div>
+      <div class="field"><b>Deckel wölbt się / Dichtlippe:</b> <span id="deckelwoelbt"></span></div>
+      <div class="field"><b>Steckgesicht:</b> <span id="steckgesicht"></span></div>
     </div>
   </div>
 
-  <div class="qr">
-    <canvas id="qr"></canvas>
+  <div class="section grid">
+    <div>
+      <h2>🔬 Functional Check</h2>
+      <div class="field"><b>Funktionalität:</b> <span id="funktionalitaet"></span></div>
+      <div class="field"><b>CCS2/CCS1 Klappe:</b> <span id="klappeccs"></span></div>
+      <div class="field"><b>JP TWIN Stopfen:</b> <span id="twinstopfen"></span></div>
+      <div class="field"><b>Fehlercode:</b> <span id="fehlercode"></span></div>
+      <div class="field"><b>Raster:</b> <span id="raster"></span></div>
+    </div>
+    <div>
+      <h2>📝 Comments</h2>
+      <div class="field"><b>Bemerkung:</b> <span id="bemerkung"></span></div>
+    </div>
   </div>
 
-  <div class="footer">
-    Generated by QualityHub | Printed: <span id="timestamp"></span>
+  <div class="section grid">
+    <div>
+      <h2>📎 Attachments</h2>
+      <div>(See attached files below 👇)</div>
+    </div>
+    <div>
+      <h2>🕒 Timestamp</h2>
+      <div id="timestamp"></div>
+      <canvas id="qr"></canvas>
+    </div>
   </div>
 
-  <button class="print-button" onclick="window.print()">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-      <path d="M19 8H5c-1.1 0-2 .9-2 2v6h4v4h10v-4h4v-6c0-1.1-.9-2-2-2zm-3 10H8v-4h8v4zm3-10V4H5v4h14z"/>
-    </svg>
-    Print
-  </button>
+  <div id="alertBox">⚠️ Uwaga: Pole NIO > 0!</div>
 
   <script>
     const params = new URLSearchParams(window.location.search);
-    const fill = (id, name) => document.getElementById(id).textContent = params.get(name) || '-';
+
+    function fill(id, key) {
+      const el = document.getElementById(id);
+      if (el) el.textContent = params.get(key) || '';
+    }
+
     const fields = [
-      'sapnumber', 'revision', 'partnumber', 'supplier', 'deliverynote', 'ordernumber', 'deliverydate',
-      'inspectiondate', 'totalqty', 'io', 'nio', 'reworked',
-      'defect1', 'raster1', 'nok1', 'reworked1',
-      'defect2', 'raster2', 'nok2', 'reworked2',
-      'defect3', 'raster3', 'nok3', 'reworked3',
-      'comment'
+      'partname', 'dmceol', 'dmcladedose', 'partid', 'verwendungszweck', 'dichtiskeit',
+      'nacharbeiten', 'labels', 'buchsen', 'peleitung', 'pinaktivator',
+      'schiefstellung', 'deckelverrastet', 'deckelwoelbt', 'steckgesicht',
+      'funktionalitaet', 'klappeccs', 'twinstopfen', 'fehlercode', 'raster',
+      'bemerkung'
     ];
-    fields.forEach(field => fill(field, field));
+
+    fields.forEach(f => fill(f, f));
+
     const nio = parseInt(params.get('nio') || '0');
     if (nio > 0) document.getElementById('alertBox').style.display = 'block';
+
     const qr = new QRious({
       element: document.getElementById('qr'),
       value: window.location.href,
-      size: 150,
+      size: 150
     });
+
     document.getElementById('timestamp').textContent = new Date().toLocaleString();
   </script>
 </body>
