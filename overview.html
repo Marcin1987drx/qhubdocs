@@ -2,101 +2,137 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Summary V2</title>
-  <script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Summary V2 - Modern Style</title>
+  https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js
   <style>
     body {
-      font-family: 'Open Sans', sans-serif;
-      font-size: 14px;
+      font-family: 'Segoe UI', 'Roboto', sans-serif;
+      margin: 40px;
+      background-color: #f9f9f9;
       color: #333;
-      padding: 32px;
     }
-    h2 {
+    h1.title {
+      text-align: center;
       color: #0078d4;
+      margin-top: 30px;
+      font-size: 28px;
     }
     .grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 24px;
+      gap: 32px;
+      margin-top: 30px;
     }
     .section {
-      margin-bottom: 32px;
+      background: white;
+      border-radius: 12px;
+      padding: 20px 24px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
     }
-    .field b {
-      display: inline-block;
-      min-width: 280px;
+    .section-title {
+      color: #0078d4;
+      font-weight: 600;
+      margin-bottom: 16px;
+      font-size: 18px;
     }
-    #alertBox {
+    .data-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 6px 0;
+      border-bottom: 1px solid #eee;
+    }
+    .data-row:last-child {
+      border-bottom: none;
+    }
+    .data-label {
+      font-weight: 500;
+      color: #555;
+    }
+    .data-value {
+      font-weight: 400;
+      color: #222;
+    }
+    .footer {
+      margin-top: 40px;
+      font-size: 12px;
+      text-align: center;
+      color: gray;
+    }
+    .qr {
+      text-align: center;
+      margin-top: 40px;
+    }
+    .alert {
+      border: 2px dashed #c0392b;
+      background-color: #fdecea;
+      padding: 20px;
+      color: #c0392b;
+      font-weight: bold;
+      text-align: center;
+      margin-top: 30px;
+      border-radius: 8px;
       display: none;
-      background: #ffd700;
-      padding: 16px;
-      border: 1px solid #333;
-      margin-top: 20px;
     }
   </style>
 </head>
 <body>
-  <div class="section grid">
-    <div>
-      <h2>📦 General Info</h2>
-      <div class="field"><b>Part name:</b> <span id="partname"></span></div>
-      <div class="field"><b>DMC Code EOL Protokoll:</b> <span id="dmceol"></span></div>
-      <div class="field"><b>DMC Code Ladedose:</b> <span id="dmcladedose"></span></div>
-      <div class="field"><b>Part Identification:</b> <span id="partid"></span></div>
-      <div class="field"><b>Verwendungszweck:</b> <span id="verwendungszweck"></span></div>
-      <div class="field"><b>Dichtiskeitprufung:</b> <span id="dichtiskeit"></span></div>
+  <h1 class="title">Inspection Summary</h1>
+
+  <div id="alertBox" class="alert">
+    ⚠️ Uwaga: Pole NIO > 0!
+  </div>
+
+  <div class="grid">
+    <div class="section">
+      <div class="section-title">📦 General Info</div>
+      <div class="data-row"><div class="data-label">Part name:</div><div class="data-value" id="partname"></div></div>
+      <div class="data-row"><div class="data-label">DMC Code EOL Protokoll:</div><div class="data-value" id="dmceol"></div></div>
+      <div class="data-row"><div class="data-label">DMC Code Ladedose:</div><div class="data-value" id="dmcladedose"></div></div>
+      <div class="data-row"><div class="data-label">Part Identification:</div><div class="data-value" id="partid"></div></div>
+      <div class="data-row"><div class="data-label">Verwendungszweck:</div><div class="data-value" id="verwendungszweck"></div></div>
+      <div class="data-row"><div class="data-label">Dichtiskeitprufung:</div><div class="data-value" id="dichtiskeit"></div></div>
     </div>
-    <div>
-      <h2>🔍🛠️ Visual & Assembly Check</h2>
-      <div class="field"><b>Nacharbeiten:</b> <span id="nacharbeiten"></span></div>
-      <div class="field"><b>Aufkleber und Labels:</b> <span id="labels"></span></div>
-      <div class="field"><b>Buchsen / Kontaktbuchsen:</b> <span id="buchsen"></span></div>
-      <div class="field"><b>PE-Leitungssatz verbaut?:</b> <span id="peleitung"></span></div>
-      <div class="field"><b>Aktuatorpin eingefahren?:</b> <span id="pinaktivator"></span></div>
-      <div class="field"><b>Schiefstellung Pins/Buchsen:</b> <span id="schiefstellung"></span></div>
-      <div class="field"><b>Deckelverrastungen:</b> <span id="deckelverrastet"></span></div>
-      <div class="field"><b>Deckel wölbt się / Dichtlippe:</b> <span id="deckelwoelbt"></span></div>
-      <div class="field"><b>Steckgesicht:</b> <span id="steckgesicht"></span></div>
+    <div class="section">
+      <div class="section-title">🔍🛠️ Visual & Assembly Check</div>
+      <div class="data-row"><div class="data-label">Nacharbeiten:</div><div class="data-value" id="nacharbeiten"></div></div>
+      <div class="data-row"><div class="data-label">Aufkleber und Labels:</div><div class="data-value" id="labels"></div></div>
+      <div class="data-row"><div class="data-label">Buchsen / Kontaktbuchsen:</div><div class="data-value" id="buchsen"></div></div>
+      <div class="data-row"><div class="data-label">PE-Leitungssatz verbaut?:</div><div class="data-value" id="peleitung"></div></div>
+      <div class="data-row"><div class="data-label">Aktuatorpin eingefahren?:</div><div class="data-value" id="pinaktivator"></div></div>
+      <div class="data-row"><div class="data-label">Schiefstellung Pins/Buchsen:</div><div class="data-value" id="schiefstellung"></div></div>
+      <div class="data-row"><div class="data-label">Deckelverrastungen:</div><div class="data-value" id="deckelverrastet"></div></div>
+      <div class="data-row"><div class="data-label">Deckel wölbt się / Dichtlippe:</div><div class="data-value" id="deckelwoelbt"></div></div>
+      <div class="data-row"><div class="data-label">Steckgesicht:</div><div class="data-value" id="steckgesicht"></div></div>
     </div>
   </div>
 
-  <div class="section grid">
-    <div>
-      <h2>🔬 Functional Check</h2>
-      <div class="field"><b>Funktionalität:</b> <span id="funktionalitaet"></span></div>
-      <div class="field"><b>CCS2/CCS1 Klappe:</b> <span id="klappeccs"></span></div>
-      <div class="field"><b>JP TWIN Stopfen:</b> <span id="twinstopfen"></span></div>
-      <div class="field"><b>Fehlercode:</b> <span id="fehlercode"></span></div>
-      <div class="field"><b>Raster:</b> <span id="raster"></span></div>
+  <div class="grid">
+    <div class="section">
+      <div class="section-title">🔬 Functional Check</div>
+      <div class="data-row"><div class="data-label">Funktionalität:</div><div class="data-value" id="funktionalitaet"></div></div>
+      <div class="data-row"><div class="data-label">CCS2/CCS1 Klappe:</div><div class="data-value" id="klappeccs"></div></div>
+      <div class="data-row"><div class="data-label">JP TWIN Stopfen:</div><div class="data-value" id="twinstopfen"></div></div>
+      <div class="data-row"><div class="data-label">Fehlercode:</div><div class="data-value" id="fehlercode"></div></div>
+      <div class="data-row"><div class="data-label">Raster:</div><div class="data-value" id="raster"></div></div>
     </div>
-    <div>
-      <h2>📝 Comments</h2>
-      <div class="field"><b>Bemerkung:</b> <span id="bemerkung"></span></div>
-    </div>
-  </div>
-
-  <div class="section grid">
-    <div>
-      <h2>📎 Attachments</h2>
-      <div>(See attached files below 👇)</div>
-    </div>
-    <div>
-      <h2>🕒 Timestamp</h2>
-      <div id="timestamp"></div>
-      <canvas id="qr"></canvas>
+    <div class="section">
+      <div class="section-title">📝 Comments</div>
+      <div class="data-row"><div class="data-label">Bemerkung:</div><div class="data-value" id="bemerkung"></div></div>
     </div>
   </div>
 
-  <div id="alertBox">⚠️ Uwaga: Pole NIO > 0!</div>
+  <div class="qr">
+    <canvas id="qr"></canvas>
+  </div>
+
+  <div class="footer">
+    Generated by QualityHub | Printed: <span id="timestamp"></span>
+  </div>
 
   <script>
     const params = new URLSearchParams(window.location.search);
-
-    function fill(id, key) {
-      const el = document.getElementById(id);
-      if (el) el.textContent = params.get(key) || '';
-    }
-
+    const fill = (id, name) => document.getElementById(id).textContent = params.get(name) || '-';
     const fields = [
       'partname', 'dmceol', 'dmcladedose', 'partid', 'verwendungszweck', 'dichtiskeit',
       'nacharbeiten', 'labels', 'buchsen', 'peleitung', 'pinaktivator',
@@ -104,18 +140,14 @@
       'funktionalitaet', 'klappeccs', 'twinstopfen', 'fehlercode', 'raster',
       'bemerkung'
     ];
-
-    fields.forEach(f => fill(f, f));
-
+    fields.forEach(field => fill(field, field));
     const nio = parseInt(params.get('nio') || '0');
     if (nio > 0) document.getElementById('alertBox').style.display = 'block';
-
     const qr = new QRious({
       element: document.getElementById('qr'),
       value: window.location.href,
-      size: 150
+      size: 150,
     });
-
     document.getElementById('timestamp').textContent = new Date().toLocaleString();
   </script>
 </body>
