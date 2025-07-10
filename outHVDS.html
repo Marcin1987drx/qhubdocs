@@ -125,7 +125,7 @@
     <div class="section">
       <div class="section-title">📝 Comments</div>
       <div class="data-row"><div class="data-label">Bemerkung:</div><div class="data-value" id="bemerkung"></div></div>
-      <div class="data-row"><div class="data-label">Attachments:</div><div class="data-value" id="attachments"></div></div>
+      
     </div>
   </div>
 
@@ -156,8 +156,8 @@
       ['geliefert', 'DataCardValue167'],
       ['lieferscheinnummer', 'DataCardValue168'],
       ['nacharbeit', 'DataCardValue171'],
-      ['bemerkung', 'DataCardValue169'],
-      ['attachments', 'DataCardValue176']
+      ['bemerkung', 'DataCardValue169']
+     
     ];
     fields.forEach(([id, param]) => fill(id, param));
     const qr = new QRious({
