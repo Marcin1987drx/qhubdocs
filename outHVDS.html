@@ -145,20 +145,18 @@
   </button>
 
   <script>
-    const params = new URLSearchParams(window.location.search);
-    const fill = (id, name) => document.getElementById(id).textContent = params.get(name) || '-';
-    const fields = [
-      ['schiene1', 'DataCardValue117_4'],
-      ['schiene2', 'DataCardValue117_3'],
-      ['bmwdmc', 'DataCardValue164'],
-      ['schienentype', 'DataCardValue165'],
-      ['datumeol', 'DataCardValue166'],
-      ['geliefert', 'DataCardValue167'],
-      ['lieferscheinnummer', 'DataCardValue168'],
-      ['nacharbeit', 'DataCardValue171'],
-      ['bemerkung', 'DataCardValue169']
-     
-    ];
+const fields = [
+  ['schiene1', 'schiene1'],
+  ['schiene2', 'schiene2'],
+  ['bmwdmc', 'bmwdmc'],
+  ['schienentype', 'schienentype'],
+  ['datumeol', 'datumeol'],
+  ['geliefert', 'geliefert'],
+  ['lieferscheinnummer', 'lieferscheinnummer'],
+  ['nacharbeit', 'nacharbeit'],
+  ['bemerkung', 'bemerkung']
+];
+
     fields.forEach(([id, param]) => fill(id, param));
     const qr = new QRious({
       element: document.getElementById('qr'),
