@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -125,7 +126,6 @@
     <div class="section">
       <div class="section-title">📝 Comments</div>
       <div class="data-row"><div class="data-label">Bemerkung:</div><div class="data-value" id="bemerkung"></div></div>
-      
     </div>
   </div>
 
@@ -145,24 +145,22 @@
   </button>
 
   <script>
-const fields = [
-  ['schiene1', 'schiene1'],
-  ['schiene2', 'schiene2'],
-  ['bmwdmc', 'bmwdmc'],
-  ['schienentype', 'schienentype'],
-  ['datumeol', 'datumeol'],
-  ['geliefert', 'geliefert'],
-  ['lieferscheinnummer', 'lieferscheinnummer'],
-  ['nacharbeit', 'nacharbeit'],
-  ['bemerkung', 'bemerkung']
-];
+    const params = new URLSearchParams(window.location.search);
+    const fill = (id) => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = params.get(id) || '-';
+    };
+    [
+      'schiene1', 'schiene2', 'bmwdmc', 'schienentype', 'datumeol',
+      'geliefert', 'lieferscheinnummer', 'nacharbeit', 'bemerkung'
+    ].forEach(fill);
 
-    fields.forEach(([id, param]) => fill(id, param));
     const qr = new QRious({
       element: document.getElementById('qr'),
       value: window.location.href,
       size: 150,
     });
+
     document.getElementById('timestamp').textContent = new Date().toLocaleString();
   </script>
 </body>
